@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BeerController.class)
 public class BeerControllerTest {
 
+  public static final String BEER_URL = "/api/v1/beer/";
   @MockBean private BeerService beerService;
 
   @Autowired private MockMvc mockMvc;
@@ -55,8 +56,7 @@ public class BeerControllerTest {
     given(beerService.getBeerById(any(UUID.class))).willReturn(validBeer);
 
     mockMvc
-        .perform(
-            get("/api/v1/beer/" + validBeer.getId().toString()).accept(MediaType.APPLICATION_JSON))
+        .perform(get(BEER_URL + validBeer.getId().toString()).accept(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
         .andExpect(jsonPath("$.id", is(validBeer.getId().toString())))
@@ -65,7 +65,6 @@ public class BeerControllerTest {
 
   @Test
   public void create_successfulTest() throws Exception {
-
     // given
     BeerDto beerDto = validBeer;
     beerDto.setId(null);
@@ -77,7 +76,7 @@ public class BeerControllerTest {
 
     // when
     mockMvc
-        .perform(post("/api/v1/beer/").contentType(MediaType.APPLICATION_JSON).content(beerToJson))
+        .perform(post(BEER_URL).contentType(MediaType.APPLICATION_JSON).content(beerToJson))
         .andExpect(status().isCreated());
   }
 
@@ -91,12 +90,11 @@ public class BeerControllerTest {
     // when
     mockMvc
         .perform(
-            put("/api/v1/beer/" + beerDto.getId())
+            put(BEER_URL + beerDto.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(beerToJson))
         .andExpect(status().isNoContent());
     // then
     then(beerService).should().update(any(), any());
-
   }
 }
