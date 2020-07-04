@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,11 +36,19 @@ public class BeerController {
   }
 
   @PostMapping
-  public ResponseEntity create(BeerDto beerDto) {
+  public ResponseEntity create(@RequestBody BeerDto beerDto) {
     BeerDto createdBeer = beerService.create(beerDto);
     HttpHeaders httpHeaders = new HttpHeaders();
+    // todo add the hostname url
     httpHeaders.add("Location", "/api/v1/beer/" + createdBeer.getId().toString());
 
     return new ResponseEntity(httpHeaders, HttpStatus.CREATED);
+  }
+
+  @PutMapping({"/{beerId}"})
+  public ResponseEntity update(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beerDto) {
+    beerService.update(beerId, beerDto);
+
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 }
