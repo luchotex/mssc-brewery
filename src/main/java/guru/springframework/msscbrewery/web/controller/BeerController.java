@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.UUID;
 
 /**
@@ -38,7 +39,7 @@ public class BeerController {
   }
 
   @PostMapping
-  public ResponseEntity create(@RequestBody BeerDto beerDto) {
+  public ResponseEntity create(@Valid @RequestBody BeerDto beerDto) {
     BeerDto createdBeer = beerService.create(beerDto);
     HttpHeaders httpHeaders = new HttpHeaders();
     // todo add the hostname url
@@ -48,7 +49,7 @@ public class BeerController {
   }
 
   @PutMapping({"/{beerId}"})
-  public ResponseEntity update(@PathVariable("beerId") UUID beerId, @RequestBody BeerDto beerDto) {
+  public ResponseEntity update(@PathVariable("beerId") UUID beerId, @Valid @RequestBody BeerDto beerDto) {
     beerService.update(beerId, beerDto);
 
     return new ResponseEntity(HttpStatus.NO_CONTENT);

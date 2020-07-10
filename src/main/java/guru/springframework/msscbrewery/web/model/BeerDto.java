@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Null;
+import javax.validation.constraints.Positive;
 import java.util.UUID;
 
 /**
@@ -17,9 +20,13 @@ import java.util.UUID;
 @Builder
 public class BeerDto {
 
+    @Null
     private UUID id;
+    @NotEmpty
     private String beerName;
+    @NotEmpty
     private String beerStyle;
+    @Positive
     private Long upc;
 
 }
